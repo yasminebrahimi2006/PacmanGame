@@ -11,8 +11,36 @@ public class Pacman extends MovableEntity {
         return score;
     }
 
+    public void addScore(int amount) {
+        this.score += amount;
+    }
+
     @Override
     public void move(Maze maze) {
-        // منطق حرکت رو مرحله بعد پیاده می‌کنیم
+        int currentRow = getX();
+        int currentCol = getY();
+        int newRow = currentRow;
+        int newCol = currentCol;
+
+        switch (getDirection()) {
+            case UP:
+                newRow = currentRow - 1;
+                break;
+            case DOWN:
+                newRow = currentRow + 1;
+                break;
+            case LEFT:
+                newCol = currentCol - 1;
+                break;
+            case RIGHT:
+                newCol = currentCol + 1;
+                break;
+            case NONE:
+                break;
+        }
+
+        if (!maze.isWall(newRow, newCol)) {
+            setPosition(newRow, newCol);
+        }
     }
 }

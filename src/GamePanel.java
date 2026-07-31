@@ -4,11 +4,13 @@ import java.awt.Graphics;
 
 public class GamePanel extends JPanel {
 
-    private static final int TILE_SIZE = 40;
+    private static final int TILE_SIZE = 55;
     private Maze maze;
+    private Pacman pacman;
 
-    public GamePanel(Maze maze) {
+    public GamePanel(Maze maze, Pacman pacman) {
         this.maze = maze;
+        this.pacman = pacman;
         int width = maze.getCols() * TILE_SIZE;
         int height = maze.getRows() * TILE_SIZE;
         this.setPreferredSize(new java.awt.Dimension(width, height));
@@ -19,6 +21,7 @@ public class GamePanel extends JPanel {
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         drawMaze(g);
+        drawPacman(g);
     }
 
     private void drawMaze(Graphics g) {
@@ -37,5 +40,12 @@ public class GamePanel extends JPanel {
                 }
             }
         }
+    }
+
+    private void drawPacman(Graphics g) {
+        int x = pacman.getY() * TILE_SIZE;
+        int y = pacman.getX() * TILE_SIZE;
+        g.setColor(Color.YELLOW);
+        g.fillOval(x + 4, y + 4, TILE_SIZE - 8, TILE_SIZE - 8);
     }
 }
