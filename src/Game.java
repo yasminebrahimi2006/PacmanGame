@@ -16,11 +16,14 @@ public class Game {
     public Game() {
         this.maze = new Maze();
         this.pacman = new Pacman(1, 1);
-        this.ghosts = new Ghost[2];
+        this.ghosts = new Ghost[] {
+            new Ghost(1, 8),
+            new Ghost(8, 1)
+        };
         this.scoreManager = new ScoreManager();
         this.pellets = createPelletsFromMaze();
 
-        this.gamePanel = new GamePanel(maze, pacman, pellets, scoreManager);
+        this.gamePanel = new GamePanel(maze, pacman, ghosts, pellets, scoreManager);
 
         this.frame = new JFrame("Pac-Man");
         this.frame.add(gamePanel);
@@ -52,7 +55,6 @@ public class Game {
 
     private void startGameLoop() {
         Timer timer = new Timer(200, e -> {
-            Direction beforeMove = pacman.getDirection();
             int oldRow = pacman.getX();
             int oldCol = pacman.getY();
 
@@ -64,10 +66,28 @@ public class Game {
                 checkPelletCollision();
             }
 
+            moveGhosts();
+checkGhostCollision();      // چک کن ببین با گوست برخورد داشته؟
             gamePanel.repaint();
         });
         timer.start();
     }
+
+    private void moveGhosts() {
+        for (Ghost ghost : ghosts) {
+            ghost.move(maze);
+        }
+    }
+
+private void checkGhostCollision() {        // تابع چک کردن برخوردشون
+        for (Ghost ghost : ghosts) {
+            if (ghost.getX() == pacman.getX() && ghost.getY() == pacman.getY()) {
+                System.out.println("روح و پکمن برخورد کردند");
+            }
+        }
+    }
+
+
 
     private void checkPelletCollision() {
         for (Pellet pellet : pellets) {

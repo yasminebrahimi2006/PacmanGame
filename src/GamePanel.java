@@ -11,12 +11,14 @@ public class GamePanel extends JPanel {
 
     private Maze maze;
     private Pacman pacman;
+    private Ghost[] ghosts;
     private List<Pellet> pellets;
     private ScoreManager scoreManager;
 
-    public GamePanel(Maze maze, Pacman pacman, List<Pellet> pellets, ScoreManager scoreManager) {
+    public GamePanel(Maze maze, Pacman pacman, Ghost[] ghosts, List<Pellet> pellets, ScoreManager scoreManager) {
         this.maze = maze;
         this.pacman = pacman;
+        this.ghosts = ghosts;
         this.pellets = pellets;
         this.scoreManager = scoreManager;
 
@@ -31,6 +33,7 @@ public class GamePanel extends JPanel {
         super.paintComponent(g);
         drawMaze(g);
         drawPellets(g);
+        drawGhosts(g);
         drawPacman(g);
         drawScore(g);
     }
@@ -58,6 +61,15 @@ public class GamePanel extends JPanel {
                 int y = pellet.getX() * TILE_SIZE + SCORE_BAR_HEIGHT;
                 g.fillOval(x + TILE_SIZE/2 - dotSize/2, y + TILE_SIZE/2 - dotSize/2, dotSize, dotSize);
             }
+        }
+    }
+
+    private void drawGhosts(Graphics g) {
+        g.setColor(Color.RED);
+        for (Ghost ghost : ghosts) {
+            int x = ghost.getY() * TILE_SIZE;
+            int y = ghost.getX() * TILE_SIZE + SCORE_BAR_HEIGHT;
+            g.fillOval(x + 4, y + 4, TILE_SIZE - 8, TILE_SIZE - 8);
         }
     }
 
