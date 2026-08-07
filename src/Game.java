@@ -12,6 +12,7 @@ public class Game {
     private GamePanel gamePanel;
     private JFrame frame;
     private List<Pellet> pellets;
+    private boolean gameOver;
 
     public Game() {
         this.maze = new Maze();
@@ -22,8 +23,9 @@ public class Game {
         };
         this.scoreManager = new ScoreManager();
         this.pellets = createPelletsFromMaze();
+        this.gameOver = false;
 
-        this.gamePanel = new GamePanel(maze, pacman, ghosts, pellets, scoreManager);
+        this.gamePanel = new GamePanel(maze, pacman, ghosts, pellets, scoreManager, this);
 
         this.frame = new JFrame("Pac-Man");
         this.frame.add(gamePanel);
@@ -41,6 +43,10 @@ public class Game {
         startGameLoop();
     }
 
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
     private List<Pellet> createPelletsFromMaze() {
         List<Pellet> result = new ArrayList<>();
         for (int row = 0; row < maze.getRows(); row++) {
@@ -55,6 +61,10 @@ public class Game {
 
     private void startGameLoop() {
         Timer timer = new Timer(200, e -> {
+            if (gameOver) {
+                return;
+            }
+
             int oldRow = pacman.getX();
             int oldCol = pacman.getY();
 
@@ -67,7 +77,8 @@ public class Game {
             }
 
             moveGhosts();
-checkGhostCollision();      // چک کن ببین با گوست برخورد داشته؟
+            checkGhostCollision();
+
             gamePanel.repaint();
         });
         timer.start();
@@ -79,22 +90,20 @@ checkGhostCollision();      // چک کن ببین با گوست برخورد د�
         }
     }
 
-private void checkGhostCollision() {        // تابع چک کردن برخوردشون
-        for (Ghost ghost : ghosts) {
-            if (ghost.getX() == pacman.getX() && ghost.getY() == pacman.getY()) {
-                System.out.println("روح و پکمن برخورد کردند");
-            }
-        }
-    }
-
-
-
     private void checkPelletCollision() {
         for (Pellet pellet : pellets) {
             if (!pellet.isCollected() && pellet.getX() == pacman.getX() && pellet.getY() == pacman.getY()) {
                 pellet.collect();
                 maze.clearPelletMark(pellet.getX(), pellet.getY());
                 scoreManager.addPoints(10);
+            }
+        }
+    }
+
+    private void checkGhostCollision() {
+        for (Ghost ghost : ghosts) {
+            if (ghost.getX() == pacman.getX() && ghost.getY() == pacman.getY()) {
+                gameOver = true;
             }
         }
     }

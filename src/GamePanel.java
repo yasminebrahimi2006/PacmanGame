@@ -14,13 +14,16 @@ public class GamePanel extends JPanel {
     private Ghost[] ghosts;
     private List<Pellet> pellets;
     private ScoreManager scoreManager;
+    private Game game;  //چون به متغیر gameOver kنیاز داریم، باید یک مرجع به کلاس Game داشته باشیم
 
-    public GamePanel(Maze maze, Pacman pacman, Ghost[] ghosts, List<Pellet> pellets, ScoreManager scoreManager) {
+
+    public GamePanel(Maze maze, Pacman pacman, Ghost[] ghosts, List<Pellet> pellets, ScoreManager scoreManager, Game game) {
         this.maze = maze;
         this.pacman = pacman;
         this.ghosts = ghosts;
         this.pellets = pellets;
         this.scoreManager = scoreManager;
+        this.game = game;
 
         int width = maze.getCols() * TILE_SIZE;
         int height = maze.getRows() * TILE_SIZE + SCORE_BAR_HEIGHT;
@@ -36,6 +39,10 @@ public class GamePanel extends JPanel {
         drawGhosts(g);
         drawPacman(g);
         drawScore(g);
+
+        if (game.isGameOver()) {
+            drawGameOverMessage(g);
+        }
     }
 
     private void drawMaze(Graphics g) {
@@ -84,5 +91,11 @@ public class GamePanel extends JPanel {
         g.setColor(Color.WHITE);
         g.setFont(new Font("Arial", Font.BOLD, 16));
         g.drawString("Score: " + scoreManager.getCurrentScore(), 10, 20);
+    }
+
+    private void drawGameOverMessage(Graphics g) {
+        g.setColor(Color.RED);
+        g.setFont(new Font("Arial", Font.BOLD, 28));
+        g.drawString("Game Over!", getWidth()/2 - 90, getHeight()/2);  // مختصات نوشته
     }
 }
