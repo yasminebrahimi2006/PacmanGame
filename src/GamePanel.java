@@ -94,8 +94,15 @@ public class GamePanel extends JPanel {
     }
 
     private void drawGameOverMessage(Graphics g) {
-        g.setColor(Color.RED);
+        String message;
+        if (game.isWon()) {
+            g.setColor(Color.GREEN);
+            message = "You Win!";
+        } else {
+            g.setColor(Color.RED);
+            message = "Game Over!";
+        }
         g.setFont(new Font("Arial", Font.BOLD, 28));
-        g.drawString("Game Over!", getWidth()/2 - 90, getHeight()/2);  // مختصات نوشته
+        g.drawString(message, getWidth()/2 - 90, getHeight()/2);
     }
 }

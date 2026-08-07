@@ -13,6 +13,7 @@ public class Game {
     private JFrame frame;
     private List<Pellet> pellets;
     private boolean gameOver;
+    private boolean won;
 
     public Game() {
         this.maze = new Maze();
@@ -24,6 +25,7 @@ public class Game {
         this.scoreManager = new ScoreManager();
         this.pellets = createPelletsFromMaze();
         this.gameOver = false;
+        this.won = false;
 
         this.gamePanel = new GamePanel(maze, pacman, ghosts, pellets, scoreManager, this);
 
@@ -45,6 +47,10 @@ public class Game {
 
     public boolean isGameOver() {
         return gameOver;
+    }
+
+    public boolean isWon() {
+        return won;
     }
 
     private List<Pellet> createPelletsFromMaze() {
@@ -74,6 +80,7 @@ public class Game {
             if (actuallyMoved) {
                 scoreManager.subtractPoints(1);
                 checkPelletCollision();
+                checkWinCondition();
             }
 
             moveGhosts();
@@ -98,6 +105,17 @@ public class Game {
                 scoreManager.addPoints(10);
             }
         }
+    }
+
+    private void checkWinCondition() {
+        for (Pellet pellet : pellets) {
+            if (!pellet.isCollected()) {
+                return;
+            }
+        }
+        scoreManager.addPoints(500);
+        won = true;
+        gameOver = true;
     }
 
     private void checkGhostCollision() {
