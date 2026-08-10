@@ -14,20 +14,31 @@ public class Game {
     private List<Pellet> pellets;
     private boolean gameOver;
     private boolean won;
+    private SoundManager soundManager;
 
     public Game() {
         this.maze = new Maze();
         this.pacman = new Pacman(1, 1);
+
         this.ghosts = new Ghost[] {
             new Ghost(1, 8),
             new Ghost(8, 1)
         };
+
         this.scoreManager = new ScoreManager();
         this.pellets = createPelletsFromMaze();
         this.gameOver = false;
         this.won = false;
+        this.soundManager = new SoundManager();
 
-        this.gamePanel = new GamePanel(maze, pacman, ghosts, pellets, scoreManager, this);
+        this.gamePanel = new GamePanel(
+            maze,
+            pacman,
+            ghosts,
+            pellets,
+            scoreManager,
+            this
+        );
 
         this.frame = new JFrame("Pac-Man");
         this.frame.add(gamePanel);
@@ -42,6 +53,8 @@ public class Game {
 
         this.frame.setVisible(true);
 
+        soundManager.playSound("sounds/start.wav");
+
         startGameLoop();
     }
 
@@ -55,6 +68,7 @@ public class Game {
 
     private List<Pellet> createPelletsFromMaze() {
         List<Pellet> result = new ArrayList<>();
+
         for (int row = 0; row < maze.getRows(); row++) {
             for (int col = 0; col < maze.getCols(); col++) {
                 if (maze.hasPelletMark(row, col)) {
@@ -62,6 +76,7 @@ public class Game {
                 }
             }
         }
+
         return result;
     }
 
@@ -76,22 +91,24 @@ public class Game {
 
             pacman.move(maze);
 
-            boolean actuallyMoved = (pacman.getX() != oldRow || pacman.getY() != oldCol);
+            boolean actuallyMoved =
+                (pacman.getX() != oldRow ||
+                 pacman.getY() != oldCol);
+
             if (actuallyMoved) {
                 scoreManager.subtractPoints(1);
                 checkPelletCollision();
                 checkWinCondition();
             }
 
-            moveGhosts();
-            checkGhostCollision();
-
-            if (gameOver) {
-                scoreManager.saveHighScore();
+            if (!gameOver) {
+                moveGhosts();
+                checkGhostCollision();
             }
 
             gamePanel.repaint();
         });
+
         timer.start();
     }
 
@@ -103,10 +120,19 @@ public class Game {
 
     private void checkPelletCollision() {
         for (Pellet pellet : pellets) {
-            if (!pellet.isCollected() && pellet.getX() == pacman.getX() && pellet.getY() == pacman.getY()) {
+            if (!pellet.isCollected()
+                    && pellet.getX() == pacman.getX()
+                    && pellet.getY() == pacman.getY()) {
+
                 pellet.collect();
-                maze.clearPelletMark(pellet.getX(), pellet.getY());
+
+                maze.clearPelletMark(
+                    pellet.getX(),
+                    pellet.getY()
+                );
+
                 scoreManager.addPoints(10);
+                soundManager.playSound("sounds/eat_pellet.wav");
             }
         }
     }
@@ -117,15 +143,25 @@ public class Game {
                 return;
             }
         }
+
         scoreManager.addPoints(500);
         won = true;
         gameOver = true;
+
+        soundManager.playSound("sounds/win.wav");
     }
 
     private void checkGhostCollision() {
         for (Ghost ghost : ghosts) {
-            if (ghost.getX() == pacman.getX() && ghost.getY() == pacman.getY()) {
+            if (ghost.getX() == pacman.getX()
+                    && ghost.getY() == pacman.getY()) {
+
                 gameOver = true;
+                won = false;
+
+                soundManager.playSound("sounds/lose.wav");
+
+                scoreManager.saveHighScore();
             }
         }
     }
