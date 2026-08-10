@@ -86,6 +86,10 @@ public class Game {
             moveGhosts();
             checkGhostCollision();
 
+            if (gameOver) {
+                scoreManager.saveHighScore();
+            }
+
             gamePanel.repaint();
         });
         timer.start();

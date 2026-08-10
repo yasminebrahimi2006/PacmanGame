@@ -52,7 +52,7 @@ public class GamePanel extends JPanel {
                 int y = row * TILE_SIZE + SCORE_BAR_HEIGHT;
 
                 if (maze.isWall(row, col)) {
-                    g.setColor(Color.BLUE);
+                    g.setColor(Color.GRAY);
                     g.fillRect(x, y, TILE_SIZE, TILE_SIZE);
                 }
             }
@@ -91,6 +91,7 @@ public class GamePanel extends JPanel {
         g.setColor(Color.WHITE);
         g.setFont(new Font("Arial", Font.BOLD, 16));
         g.drawString("Score: " + scoreManager.getCurrentScore(), 10, 20);
+        g.drawString("High Score: " + scoreManager.getHighScore(), 150, 20);
     }
 
     private void drawGameOverMessage(Graphics g) {
