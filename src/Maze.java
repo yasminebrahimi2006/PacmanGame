@@ -6,7 +6,11 @@ public class Maze {
     private static final int PELLET_MARK = 2;
 
     public Maze() {
-        grid = new int[][] {
+        grid = createInitialGrid();
+    }
+
+    private int[][] createInitialGrid() {
+        return new int[][] {
             {1,1,1,1,1,1,1,1,1,1},
             {1,2,2,2,1,2,2,2,2,1},
             {1,2,1,2,1,2,1,1,2,1},
@@ -18,6 +22,10 @@ public class Maze {
             {1,2,1,1,1,1,1,1,2,1},
             {1,1,1,1,1,1,1,1,1,1}
         };
+    }
+
+    public void reset() {
+        grid = createInitialGrid();
     }
 
     public int getRows() {

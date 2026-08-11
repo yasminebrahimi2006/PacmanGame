@@ -24,4 +24,8 @@ public class Pellet {
     public void collect() {
         this.collected = true;
     }
+
+    public void resetCollected() {  //for the PlayAgain button
+        this.collected = false;
+    }
 }

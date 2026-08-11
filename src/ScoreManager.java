@@ -35,6 +35,10 @@ public class ScoreManager {
         }
     }
 
+    public void resetCurrentScore() {  // for the PlayAgain button
+        currentScore = 0;
+    }
+
     private int loadHighScore() {
         File file = new File(FILE_NAME);
 

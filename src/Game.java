@@ -15,6 +15,7 @@ public class Game {
     private boolean gameOver;
     private boolean won;
     private SoundManager soundManager;
+    private Timer gameLoopTimer;
 
     public Game() {
         this.maze = new Maze();
@@ -65,7 +66,34 @@ public class Game {
     public boolean isWon() {
         return won;
     }
+    public void restart() {          ////////// for the PlayAgain button ////////////
+        maze.reset();
+        for (Pellet pellet : pellets) {
+            pellet.resetCollected();
+        }
 
+        pacman.setPosition(1, 1);
+        pacman.setDirection(Direction.NONE);
+        ghosts[0].setPosition(1, 8);
+        ghosts[1].setPosition(8, 1);
+
+        scoreManager.resetCurrentScore();
+
+        gameOver = false;
+        won = false;
+
+        soundManager.playSound("sounds/start.wav");
+        
+        gamePanel.repaint();
+        
+        javax.swing.SwingUtilities.invokeLater(() -> {
+        frame.requestFocusInWindow();
+         });
+
+         startGameLoop();
+    } //**********************************************************************///
+
+ 
     private List<Pellet> createPelletsFromMaze() {
         List<Pellet> result = new ArrayList<>();
 
@@ -81,36 +109,40 @@ public class Game {
     }
 
     private void startGameLoop() {
-        Timer timer = new Timer(200, e -> {
-            if (gameOver) {
-                return;
-            }
-
-            int oldRow = pacman.getX();
-            int oldCol = pacman.getY();
-
-            pacman.move(maze);
-
-            boolean actuallyMoved =
-                (pacman.getX() != oldRow ||
-                 pacman.getY() != oldCol);
-
-            if (actuallyMoved) {
-                scoreManager.subtractPoints(1);
-                checkPelletCollision();
-                checkWinCondition();
-            }
-
-            if (!gameOver) {
-                moveGhosts();
-                checkGhostCollision();
-            }
-
-            gamePanel.repaint();
-        });
-
-        timer.start();
+    if (gameLoopTimer != null) {
+        gameLoopTimer.stop();  // ✅ Stop old timer
     }
+    
+    gameLoopTimer = new Timer(200, e -> {
+        if (gameOver) {
+            return;
+        }
+
+        int oldRow = pacman.getX();
+        int oldCol = pacman.getY();
+
+        pacman.move(maze);
+
+        boolean actuallyMoved =
+            (pacman.getX() != oldRow ||
+             pacman.getY() != oldCol);
+
+        if (actuallyMoved) {
+            scoreManager.subtractPoints(1);
+            checkPelletCollision();
+            checkWinCondition();
+        }
+
+        if (!gameOver) {
+            moveGhosts();
+            checkGhostCollision();
+        }
+
+        gamePanel.repaint();
+    });
+
+    gameLoopTimer.start();
+}
 
     private void moveGhosts() {
         for (Ghost ghost : ghosts) {
@@ -149,6 +181,8 @@ public class Game {
         gameOver = true;
 
         soundManager.playSound("sounds/win.wav");
+
+        scoreManager.saveHighScore();
     }
 
     private void checkGhostCollision() {

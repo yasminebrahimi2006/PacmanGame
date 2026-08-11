@@ -1,3 +1,4 @@
+import javax.swing.JButton;  // for button
 import javax.swing.ImageIcon; // for images
 import java.awt.Image;  // for images
 import javax.swing.JPanel;
@@ -19,6 +20,7 @@ public class GamePanel extends JPanel {
     private Game game;  //چون به متغیر gameOver kنیاز داریم، باید یک مرجع به کلاس Game داشته باشیم
     private Image pacmanImage;
     private Image[] ghostImages;
+    private JButton playAgainButton; // new field
 
     public GamePanel(Maze maze, Pacman pacman, Ghost[] ghosts, List<Pellet> pellets, ScoreManager scoreManager, Game game) {
         this.maze = maze;
@@ -29,19 +31,37 @@ public class GamePanel extends JPanel {
         this.game = game;
 
 
-        pacmanImage = new ImageIcon("images/pacman.png").getImage();
+pacmanImage = new ImageIcon("images/pacman.png").getImage();
 
-ghostImages = new Image[3];
+ghostImages = new Image[2];
 ghostImages[0] = new ImageIcon("images/ghost1.png").getImage();
 ghostImages[1] = new ImageIcon("images/ghost2.png").getImage();
-ghostImages[2] = new ImageIcon("images/pacman.png").getImage();
 
         int width = maze.getCols() * TILE_SIZE;
         int height = maze.getRows() * TILE_SIZE + SCORE_BAR_HEIGHT;
         this.setPreferredSize(new java.awt.Dimension(width, height));
         this.setBackground(Color.BLACK);
-    }
+    
+   
+    ////////////////////button
+    this.setLayout(null); // Absolute positioning 
 
+    playAgainButton = new JButton("Play Again");
+    int buttonWidth = 140;
+        int buttonHeight = 40;
+        int buttonX = width / 2 - buttonWidth / 2;
+        int buttonY = height / 2 + 40;
+        playAgainButton.setBounds(buttonX, buttonY, buttonWidth, buttonHeight);
+         playAgainButton.setVisible(false);
+        playAgainButton.addActionListener(e -> {
+            game.restart();
+            requestFocusInWindow();
+        });
+        this.add(playAgainButton); 
+    }
+    
+    ///////////////////////
+    
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -53,6 +73,9 @@ ghostImages[2] = new ImageIcon("images/pacman.png").getImage();
 
         if (game.isGameOver()) {
             drawGameOverMessage(g);
+            playAgainButton.setVisible(true);
+        } else {
+            playAgainButton.setVisible(false);
         }
     }
 
