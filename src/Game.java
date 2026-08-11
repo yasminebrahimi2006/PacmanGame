@@ -22,8 +22,11 @@ public class Game {
         this.pacman = new Pacman(1, 1);
 
         this.ghosts = new Ghost[] {
-            new Ghost(1, 8),
-            new Ghost(8, 1)
+            new Ghost(1, 18),
+            new Ghost(17, 1),
+            new Ghost(14,18),
+            new Ghost(9,10)
+ 
         };
 
         this.scoreManager = new ScoreManager();
@@ -74,8 +77,10 @@ public class Game {
 
         pacman.setPosition(1, 1);
         pacman.setDirection(Direction.NONE);
-        ghosts[0].setPosition(1, 8);
-        ghosts[1].setPosition(8, 1);
+        ghosts[0].setPosition(1, 18);
+        ghosts[1].setPosition(17, 1);
+        ghosts[2].setPosition(14, 18);
+        ghosts[3].setPosition(9, 10);
 
         scoreManager.resetCurrentScore();
 
@@ -178,6 +183,8 @@ public class Game {
 
         scoreManager.addPoints(500);
         won = true;
+
+        
         gameOver = true;
 
         soundManager.playSound("sounds/win.wav");

@@ -9,7 +9,7 @@ import java.util.List;
 
 public class GamePanel extends JPanel {
 
-    private static final int TILE_SIZE = 40;
+    private static final int TILE_SIZE = 32;
     private static final int SCORE_BAR_HEIGHT = 30;
 
     private Maze maze;
@@ -33,9 +33,11 @@ public class GamePanel extends JPanel {
 
 pacmanImage = new ImageIcon("images/pacman.png").getImage();
 
-ghostImages = new Image[2];
+ghostImages = new Image[4];
 ghostImages[0] = new ImageIcon("images/ghost1.png").getImage();
 ghostImages[1] = new ImageIcon("images/ghost2.png").getImage();
+ghostImages[2] = new ImageIcon("images/ghost3.png").getImage();
+ghostImages[3] = new ImageIcon("images/ghost4.png").getImage();
 
         int width = maze.getCols() * TILE_SIZE;
         int height = maze.getRows() * TILE_SIZE + SCORE_BAR_HEIGHT;
@@ -130,7 +132,7 @@ ghostImages[1] = new ImageIcon("images/ghost2.png").getImage();
     int y = pacman.getX() * TILE_SIZE + SCORE_BAR_HEIGHT;
 
     g.drawImage(
-        pacmanImage,
+        pacmanImage, 
         x,
         y,
         TILE_SIZE,
