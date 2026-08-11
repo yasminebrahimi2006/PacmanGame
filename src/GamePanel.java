@@ -1,3 +1,5 @@
+import javax.swing.ImageIcon; // for images
+import java.awt.Image;  // for images
 import javax.swing.JPanel;
 import java.awt.Color;
 import java.awt.Font;
@@ -15,7 +17,8 @@ public class GamePanel extends JPanel {
     private List<Pellet> pellets;
     private ScoreManager scoreManager;
     private Game game;  //چون به متغیر gameOver kنیاز داریم، باید یک مرجع به کلاس Game داشته باشیم
-
+    private Image pacmanImage;
+    private Image[] ghostImages;
 
     public GamePanel(Maze maze, Pacman pacman, Ghost[] ghosts, List<Pellet> pellets, ScoreManager scoreManager, Game game) {
         this.maze = maze;
@@ -24,6 +27,14 @@ public class GamePanel extends JPanel {
         this.pellets = pellets;
         this.scoreManager = scoreManager;
         this.game = game;
+
+
+        pacmanImage = new ImageIcon("images/pacman.png").getImage();
+
+ghostImages = new Image[3];
+ghostImages[0] = new ImageIcon("images/ghost1.png").getImage();
+ghostImages[1] = new ImageIcon("images/ghost2.png").getImage();
+ghostImages[2] = new ImageIcon("images/pacman.png").getImage();
 
         int width = maze.getCols() * TILE_SIZE;
         int height = maze.getRows() * TILE_SIZE + SCORE_BAR_HEIGHT;
@@ -52,7 +63,7 @@ public class GamePanel extends JPanel {
                 int y = row * TILE_SIZE + SCORE_BAR_HEIGHT;
 
                 if (maze.isWall(row, col)) {
-                    g.setColor(Color.GRAY);
+                    g.setColor(Color.BLUE);
                     g.fillRect(x, y, TILE_SIZE, TILE_SIZE);
                 }
             }
@@ -71,21 +82,39 @@ public class GamePanel extends JPanel {
         }
     }
 
-    private void drawGhosts(Graphics g) {
-        g.setColor(Color.RED);
-        for (Ghost ghost : ghosts) {
-            int x = ghost.getY() * TILE_SIZE;
-            int y = ghost.getX() * TILE_SIZE + SCORE_BAR_HEIGHT;
-            g.fillOval(x + 4, y + 4, TILE_SIZE - 8, TILE_SIZE - 8);
-        }
-    }
+   private void drawGhosts(Graphics g) {  //this uses images//
+    for (int i = 0; i < ghosts.length; i++) {
+        Ghost ghost = ghosts[i];
 
-    private void drawPacman(Graphics g) {
-        int x = pacman.getY() * TILE_SIZE;
-        int y = pacman.getX() * TILE_SIZE + SCORE_BAR_HEIGHT;
-        g.setColor(Color.YELLOW);
-        g.fillOval(x + 4, y + 4, TILE_SIZE - 8, TILE_SIZE - 8);
+        int x = ghost.getY() * TILE_SIZE;
+        int y = ghost.getX() * TILE_SIZE + SCORE_BAR_HEIGHT;
+
+        Image image = ghostImages[i % ghostImages.length];
+
+        g.drawImage(
+            image,
+            x,
+            y,
+            TILE_SIZE,
+            TILE_SIZE,
+            this
+        );
     }
+}
+
+   private void drawPacman(Graphics g) { //this uses images
+    int x = pacman.getY() * TILE_SIZE;
+    int y = pacman.getX() * TILE_SIZE + SCORE_BAR_HEIGHT;
+
+    g.drawImage(
+        pacmanImage,
+        x,
+        y,
+        TILE_SIZE,
+        TILE_SIZE,
+        this
+    );
+}
 
     private void drawScore(Graphics g) {
         g.setColor(Color.WHITE);
