@@ -16,6 +16,7 @@ public class Game {
     private boolean won;
     private SoundManager soundManager;
     private Timer gameLoopTimer;
+    private Timer ghostTimer;
 
     public Game() {
         this.maze = new Maze();
@@ -115,8 +116,11 @@ public class Game {
 
     private void startGameLoop() {
     if (gameLoopTimer != null) {
-        gameLoopTimer.stop();  // ✅ Stop old timer
+        gameLoopTimer.stop();  
     }
+     if (ghostTimer != null) {
+            ghostTimer.stop();
+        }
     
     gameLoopTimer = new Timer(200, e -> {
         if (gameOver) {
@@ -139,15 +143,30 @@ public class Game {
         }
 
         if (!gameOver) {
-            moveGhosts();
             checkGhostCollision();
         }
 
         gamePanel.repaint();
     });
+        
+        ghostTimer = new Timer(100, e -> {
+            if (gameOver) {
+                return;
+            }
 
-    gameLoopTimer.start();
-}
+            
+            moveGhosts();
+            
+        
+            if (!gameOver) {
+                checkGhostCollision();
+            }
+            
+            gamePanel.repaint();
+    });  
+              gameLoopTimer.start();
+        ghostTimer.start();
+    }
 
     private void moveGhosts() {
         for (Ghost ghost : ghosts) {

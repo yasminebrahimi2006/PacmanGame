@@ -54,7 +54,7 @@ public class Ghost extends MovableEntity {
                (d1 == Direction.RIGHT && d2 == Direction.LEFT);
     }
 
-    
+
     private List<Direction> getPossibleDirections(Maze maze) {
         List<Direction> options = new ArrayList<>();
         int row = getX();
