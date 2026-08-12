@@ -20,7 +20,7 @@ public class Game {
 
     public Game() {
         this.maze = new Maze();
-        this.pacman = new Pacman(1, 1);
+        this.pacman = new Pacman(18, 1);
 
         this.ghosts = new Ghost[] {
             new Ghost(1, 18),
@@ -50,7 +50,7 @@ public class Game {
         this.frame.pack();
         this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.frame.setResizable(false);
-        this.frame.setLocationRelativeTo(null);
+        this.frame.setLocationRelativeTo(null);  // پنجره وسط صفحه باشه
 
         KeyHandler keyHandler = new KeyHandler(pacman);
         this.frame.addKeyListener(keyHandler);
@@ -59,6 +59,9 @@ public class Game {
         this.frame.setVisible(true);
 
         soundManager.playSound("sounds/start.wav");
+
+
+
 
         startGameLoop();
     }
@@ -70,18 +73,22 @@ public class Game {
     public boolean isWon() {
         return won;
     }
+
+
+
+
     public void restart() {          ////////// for the PlayAgain button ////////////
         maze.reset();
         for (Pellet pellet : pellets) {
             pellet.resetCollected();
         }
 
-        pacman.setPosition(1, 1);
+        pacman.setPosition(18, 1);
         pacman.setDirection(Direction.NONE);
-        ghosts[0].setPosition(1, 18);
-        ghosts[1].setPosition(17, 1);
-        ghosts[2].setPosition(14, 18);
-        ghosts[3].setPosition(9, 10);
+        ghosts[0].setPosition(9, 9);
+        ghosts[1].setPosition(9, 10);
+        ghosts[2].setPosition(10, 9);
+        ghosts[3].setPosition(10, 10);
 
         scoreManager.resetCurrentScore();
 
@@ -149,7 +156,7 @@ public class Game {
         gamePanel.repaint();
     });
         
-        ghostTimer = new Timer(100, e -> {
+        ghostTimer = new Timer(180, e -> {
             if (gameOver) {
                 return;
             }

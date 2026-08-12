@@ -20,7 +20,8 @@ public class GamePanel extends JPanel {
     private Game game;  //چون به متغیر gameOver kنیاز داریم، باید یک مرجع به کلاس Game داشته باشیم
     private Image pacmanImage;
     private Image[] ghostImages;
-    private JButton playAgainButton; // new field
+    private JButton playAgainButton; 
+
 
     public GamePanel(Maze maze, Pacman pacman, Ghost[] ghosts, List<Pellet> pellets, ScoreManager scoreManager, Game game) {
         this.maze = maze;
@@ -31,6 +32,8 @@ public class GamePanel extends JPanel {
         this.game = game;
 
 
+
+    //////// uploading the images
 pacmanImage = new ImageIcon("images/pacman.png").getImage();
 
 ghostImages = new Image[4];
@@ -127,19 +130,13 @@ ghostImages[3] = new ImageIcon("images/ghost4.png").getImage();
     }
 }
 
-   private void drawPacman(Graphics g) { //this uses images
+  private void drawPacman(Graphics g) {
     int x = pacman.getY() * TILE_SIZE;
     int y = pacman.getX() * TILE_SIZE + SCORE_BAR_HEIGHT;
-
-    g.drawImage(
-        pacmanImage, 
-        x,
-        y,
-        TILE_SIZE,
-        TILE_SIZE,
-        this
-    );
+    g.drawImage(pacmanImage, x, y, TILE_SIZE, TILE_SIZE, this);
 }
+
+
 
     private void drawScore(Graphics g) {
         g.setColor(Color.WHITE);
@@ -160,4 +157,6 @@ ghostImages[3] = new ImageIcon("images/ghost4.png").getImage();
         g.setFont(new Font("Arial", Font.BOLD, 28));
         g.drawString(message, getWidth()/2 - 90, getHeight()/2);
     }
+
+
 }

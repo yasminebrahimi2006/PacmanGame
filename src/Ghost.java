@@ -4,20 +4,18 @@ import java.util.Random;
 
 public class Ghost extends MovableEntity {
 
-    private boolean isWeak;
+    
     private Random random;
     private Direction previousDirection;
 
     public Ghost(int startX, int startY) {
         super(startX, startY);
-        this.isWeak = false;
         this.random = new Random();
         this.previousDirection = Direction.NONE;   // مقدار اولیه
     }
 
-    public boolean isWeak() {
-        return isWeak;
-    }
+    
+    
 
     @Override
     public void move(Maze maze) {
@@ -26,7 +24,7 @@ public class Ghost extends MovableEntity {
         possibleDirections.removeIf(dir -> isOpposite(dir, previousDirection));
 
         if (possibleDirections.isEmpty()) {
-            // اگه هیچ مسیری نبود (بن‌بست)، مجبوریم برگردیم عقب
+            // 
             possibleDirections = getPossibleDirections(maze);
         }
 
