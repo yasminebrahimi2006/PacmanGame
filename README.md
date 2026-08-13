@@ -36,4 +36,5 @@ IDE پیشنهادی =  IntelliJ IDEA، Eclipse، NetBeans یا VS Code (با ا
   ```bash
   git clone <آدرس-ریپازیتوری>
 cd pacman-java
+
 آدرس ریپازیتوری در گیتهاب = https://github.com/yasminebrahimi2006/PacmanGame
